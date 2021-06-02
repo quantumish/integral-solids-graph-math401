@@ -1,15 +1,16 @@
 import matplotlib.pyplot as plt
+from matplotlib.axes import Axes
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from matplotlib.widgets import TextBox
 import math
 import numpy as np
-from typing import Final, Any, List, Tuple
+from typing import Final, List, Tuple
 
 SPACIOUS: Final[float] = 1.1
 
 fig: plt.Figure = plt.figure()
-ax: Any = fig.add_subplot(1, 1, 1, projection='3d')
+ax: Axes = fig.add_subplot(1, 1, 1, projection='3d')
 plt.subplots_adjust(bottom=0.2)
 
 def draw(f: str = "math.sqrt(x)", bound: float = 9, shift: float = 0.3) -> None:
@@ -37,8 +38,8 @@ def draw(f: str = "math.sqrt(x)", bound: float = 9, shift: float = 0.3) -> None:
 def f_submit(func: str) -> None:
     draw(func)
 
-axbox: Any = plt.axes([0.1, 0.05, 0.8, 0.075])
-f_text_box: Any = TextBox(axbox, 'f(x)', initial="math.sqrt(x)")
+axbox: Axes = plt.axes([0.1, 0.05, 0.8, 0.075])
+f_text_box: TextBox = TextBox(axbox, 'f(x)', initial="math.sqrt(x)")
 f_text_box.on_submit(f_submit)
 draw()
 plt.show()
