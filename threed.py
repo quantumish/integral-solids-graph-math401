@@ -13,10 +13,13 @@ fig: plt.Figure = plt.figure()
 ax: Axes = fig.add_subplot(1, 1, 1, projection='3d')
 plt.subplots_adjust(bottom=0.2)
 
-def draw(f: str = "math.sqrt(x)", bound: float = 9, shift: float = 0.3) -> None:
+cache: List[str] = ["math.sqrt(x)", "9", "0.3"]
+
+def draw(f: str, bound: float, shift: float) -> None:
+    cache[0], cache[1], cache[2] = f, str(bound), str(shift)
     ax.clear()
     x: float = 0
-    while (x < 9):
+    while (x < bound):
         verts: List[List[Tuple[float,float,float]]]
         verts = [[(x,eval(f)/2,eval(f)/2), (x,0,0), (x,eval(f),0)]]
         coll: Poly3DCollection = Poly3DCollection(verts)
@@ -34,13 +37,17 @@ def draw(f: str = "math.sqrt(x)", bound: float = 9, shift: float = 0.3) -> None:
     ax.axes.set_zlim3d((y_min/2)*SPACIOUS if (y_min < 0) else 0, top=y_max*SPACIOUS)
     ax.legend()
     plt.draw()
+    
+f_axbox: Axes = plt.axes([0.1, 0.05, 0.8, 0.075])
+b_axbox: Axes = plt.axes([0.1, 0.15, 0.1, 0.075])
+s_axbox: Axes = plt.axes([0.25, 0.15, 0.1, 0.075])
+f_text_box: TextBox = TextBox(f_axbox, 'f(x)', initial="math.sqrt(x)")
+f_text_box.on_submit(lambda text: draw(text, float(cache[1]), float(cache[2])))
+b_text_box: TextBox = TextBox(b_axbox, 'bound ', initial="9")
+b_text_box.on_submit(lambda text: draw(cache[0], float(text), float(cache[2])))
+s_text_box: TextBox = TextBox(s_axbox, 'shift ', initial="0.3")
+s_text_box.on_submit(lambda text: draw(cache[0], float(cache[1]), float(text)))
 
-def f_submit(func: str) -> None:
-    draw(func)
-
-axbox: Axes = plt.axes([0.1, 0.05, 0.8, 0.075])
-f_text_box: TextBox = TextBox(axbox, 'f(x)', initial="math.sqrt(x)")
-f_text_box.on_submit(f_submit)
-draw()
+draw(cache[0], float(cache[1]), float(cache[2]))
 plt.show()
 
