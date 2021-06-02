@@ -5,7 +5,7 @@ from matplotlib.widgets import TextBox
 import math
 import numpy as np
 
-SPACIOUS = 1
+SPACIOUS = 1.1
 
 shift = 0.3
 
@@ -28,16 +28,14 @@ def draw(f="math.sqrt(x)", bound=9):
     y_max = max(y_smooth)
     y_min = min(y_smooth)
     ax.plot(x_smooth, y_smooth, label="y=%s"%f)
-    ax.plot([bound,bound], [y_min,y_max], label="x=%d"%bound)
-    ax.axes.set_xlim3d(left=0, right=10)
-    print(y_min, y_max)
-    ax.axes.set_ylim3d(bottom=y_min*SPACIOUS, top=y_max*SPACIOUS)
-    ax.axes.set_zlim3d(bottom=(y_min/2), top=(y_max/2))
+    ax.plot([bound,bound], [y_min*SPACIOUS if (y_min < 0) else 0, y_max], label="x=%d"%bound)
+    ax.axes.set_xlim3d(left=0, right=bound*SPACIOUS)
+    ax.axes.set_ylim3d(bottom=y_min*SPACIOUS if (y_min < 0) else 0, top=y_max*SPACIOUS)
+    ax.axes.set_zlim3d((y_min/2)*SPACIOUS if (y_min < 0) else 0, top=y_max*SPACIOUS)
     plt.draw()
 
 def f_submit(func):
     draw(func)
-
 
 axbox = plt.axes([0.1, 0.05, 0.8, 0.075])
 f_text_box = TextBox(axbox, 'f(x)', initial="math.sqrt(x)")
