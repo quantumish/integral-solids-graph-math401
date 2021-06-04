@@ -50,7 +50,7 @@ class Solid:
 
     @staticmethod
     def create_polygon(verts: List[Tuple]) -> Poly3DCollection:
-        coll: Poly3DCollection = Poly3DCollection(verts)
+        coll: Poly3DCollection = Poly3DCollection([verts])
         coll.set_edgecolor("#000000")
         return coll
 
